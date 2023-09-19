@@ -23,9 +23,9 @@ describe("TestCases ", () => {
   const expectedDepatureDate = today_date + 1;
   const expectedreturnDate = today_date + 2;
   console.log(TheDate);
-  it.skip("Randomly enter the website arabic or english ", () => {
+  it("Randomly enter the website arabic or english ", () => {
     let Websites = [
-      "https://global.almosafer.com/ar",
+      "https://global.almosafer.com/ar",  
       "https://global.almosafer.com/en",
     ];
 
