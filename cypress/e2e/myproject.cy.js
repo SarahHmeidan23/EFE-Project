@@ -1,70 +1,65 @@
-/// <reference types= "cypress" />
-Cypress.on("uncaught:exception", (err, runnable) => {
-  // returning false here prevents Cypress from
-  // failing the test
+/// <reference types="cypress"/>
+
+Cypress.on("uncaught:expection", (err, runnable) => {
   return false;
 });
+const ExpectedCurrancy = "SAR";
+let websites = ["https://www.almosafer.com/en", "https://www.almosafer.com/ar"];
+let RandomIndex = Math.floor(Math.random() * websites.length);
+let DataEnglish = ["Dubai", "Jaddah", "Doha"];
+let RandomEnglish = Math.floor(Math.random() * DataEnglish.length);
+let DataArabic = ["دبي", "رياض", "ابو ظبي"];
+let RandomArabic = Math.floor(Math.random() * DataArabic.length);
 
-Cypress.Commands.add("visiturl", () => {
-  let Websites = [
-    "https://global.almosafer.com/ar",
-    "https://global.almosafer.com/en",
-  ];
-
-  let RandomIndex = Math.floor(Math.random() * Websites.length);
-  cy.visit(Websites[RandomIndex]);
-
-  cy.get(".cta__saudi").click();
-});
-
-describe("TestCases ", () => {
+describe("testcases", () => {
   const TheDate = new Date();
   const today_date = TheDate.getDate();
-  const expectedDepatureDate = today_date + 1;
+  const expectedDepartureDate = today_date + 1;
   const expectedreturnDate = today_date + 2;
   console.log(TheDate);
-  it("Randomly enter the website arabic or english ", () => {
-    let Websites = [
-      "https://global.almosafer.com/ar",  
-      "https://global.almosafer.com/en",
-    ];
 
-    let RandomIndex = Math.floor(Math.random() * Websites.length);
-    cy.visit(Websites[RandomIndex]);
-
-    let ArabicCities = ["جدة", "دبي"];
-    let ArabicRandomIndex = Math.floor(Math.random() * ArabicCities.length);
-    let englishCities = ["riyadh", "dubai", "jeddah"];
-    let EnglishRandomIndex = Math.floor(Math.random() * englishCities.length);
-
+  it("test the currency is SAR", () => {
+    cy.visit("https://www.almosafer.com/en");
+    cy.get(".cta__saudi").click();
+    cy.get('[data-testid="Header__CurrencySelector"]')
+      .invoke("text")
+      .should("include", ExpectedCurrancy);
+  });
+  it("check the language of the website", () => {
+    cy.visit("https://www.almosafer.com/en");
+    cy.get(".cta__saudi").click();
+    cy.get("html").should("have.attr", "lang", "en");
+  });
+  it("randomly enter the website arabic or english", () => {
+    cy.visit(websites[RandomIndex]);
     cy.get(".cta__saudi").click();
     cy.get("#uncontrolled-tab-example-tab-hotels").click();
     if (RandomIndex == 0) {
       cy.get('[data-testid="AutoCompleteInput"]').type(
-        ArabicCities[ArabicRandomIndex]
+        DataEnglish[RandomEnglish]
       );
     } else {
       cy.get('[data-testid="AutoCompleteInput"]').type(
-        englishCities[EnglishRandomIndex]);}
-     });
-  it.skip("test the depature date + the return date ", () => {
-    cy.visiturl();
-
+        DataArabic[RandomArabic]
+      );
+    }
+  });
+  it("test to add second option", () => {
+    cy.visit(websites[0]);
+    cy.get(".cta__saudi").click();
+    cy.get("#uncontrolled-tab-example-tab-hotels").click();
+    cy.get('[data-testid="AutoCompleteInput"]').type("Dubai");
+    cy.get('[data-testid="AutoCompleteResultItem1"] > .sc-12clos8-5').click();
+    cy.get('[data-testid="HotelSearchBox__SearchButton"]').click();
+  });
+  it("test the depature date + the return date", () => {
+    cy.visit(websites[RandomIndex]);
+    cy.get(".cta__saudi").click();
     cy.get('[data-testid="FlightSearchBox__FromDateButton"] > .sc-eSePXt')
       .invoke("text")
       .then((elementText) => {
-        expect(expectedDepatureDate).to.eql(parseInt(elementText.trim()));
-      });0
-    });
-    it.skip("check the currency", () => {
-      cy.visiturl();
-  
-      cy.get('[data-testid="Header__CurrencySelector"]')
-        .invoke("text")
-        .should("include", "SAR");
-    });
-    
- 
-    });
-  
-
+        expect(expectedDepartureDate).to.eql(parseInt(elementText.trim()));
+      });
+    // cy.get('[data-testid="FlightSearchBox__FromDateButton"] > .sc-eSePXt').invoke("text").should("include",expectedDepartureDate)
+  });
+});
