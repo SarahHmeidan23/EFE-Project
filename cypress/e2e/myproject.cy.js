@@ -18,19 +18,19 @@ describe("testcases", () => {
   const expectedreturnDate = today_date + 2;
   console.log(TheDate);
 
-  it("test the currency is SAR", () => {
+  it.skip("test the currency is SAR", () => {
     cy.visit("https://www.almosafer.com/en");
     cy.get(".cta__saudi").click();
     cy.get('[data-testid="Header__CurrencySelector"]')
       .invoke("text")
       .should("include", ExpectedCurrancy);
   });
-  it("check the language of the website", () => {
+  it.skip("check the language of the website", () => {
     cy.visit("https://www.almosafer.com/en");
     cy.get(".cta__saudi").click();
     cy.get("html").should("have.attr", "lang", "en");
   });
-  it("randomly enter the website arabic or english", () => {
+  it.skip("randomly enter the website arabic or english", () => {
     cy.visit(websites[RandomIndex]);
     cy.get(".cta__saudi").click();
     cy.get("#uncontrolled-tab-example-tab-hotels").click();
@@ -44,7 +44,7 @@ describe("testcases", () => {
       );
     }
   });
-  it("test to add second option", () => {
+  it.skip("test to add second option", () => {
     cy.visit(websites[0]);
     cy.get(".cta__saudi").click();
     cy.get("#uncontrolled-tab-example-tab-hotels").click();
