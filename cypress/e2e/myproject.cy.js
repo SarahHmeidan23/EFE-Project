@@ -82,9 +82,6 @@ describe("testcases", () => {
       cy.get('.Price__Value').last().invoke('text').then(parseInt).then((lastElement)=>{
         expect(firstElement).to.be.lessThan(lastElement)
       })
-    })
- 
-
-    
+    })  
   });
 });
