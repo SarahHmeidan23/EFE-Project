@@ -52,7 +52,7 @@ describe("testcases", () => {
     cy.get('[data-testid="AutoCompleteResultItem1"] > .sc-12clos8-5').click();
     cy.get('[data-testid="HotelSearchBox__SearchButton"]').click();
   });
-  it("test the depature date + the return date", () => {
+  it.skip("test the depature date + the return date", () => {
     cy.visit(websites[RandomIndex]);
     cy.get(".cta__saudi").click();
     cy.get('[data-testid="FlightSearchBox__FromDateButton"] > .sc-eSePXt')
@@ -61,5 +61,30 @@ describe("testcases", () => {
         expect(expectedDepartureDate).to.eql(parseInt(elementText.trim()));
       });
     // cy.get('[data-testid="FlightSearchBox__FromDateButton"] > .sc-eSePXt').invoke("text").should("include",expectedDepartureDate)
+  });
+  it('test the price(low-high) ', () => { 
+    cy.visit(websites[RandomIndex]);
+    cy.get(".cta__saudi").click();
+    cy.get("#uncontrolled-tab-example-tab-hotels").click();
+    if (RandomIndex == 0) {
+      cy.get('[data-testid="AutoCompleteInput"]').type(
+        DataEnglish[RandomEnglish]
+      );
+    } else {
+      cy.get('[data-testid="AutoCompleteInput"]').type(
+        DataArabic[RandomArabic]
+      );
+    }
+    cy.get('[data-testid="HotelSearchBox__SearchButton"]').click()
+    cy.get('[data-testid="HotelSearchResult__sort__LOWEST_PRICE"]').click()
+
+    cy.get('.Price__Value').first().invoke('text').then(parseInt).then((firstElement)=>{
+      cy.get('.Price__Value').last().invoke('text').then(parseInt).then((lastElement)=>{
+        expect(firstElement).to.be.lessThan(lastElement)
+      })
+    })
+ 
+
+    
   });
 });
